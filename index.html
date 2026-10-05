@@ -56,7 +56,21 @@ input[type=text]:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 
 /* Form */
 .work{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
 @media (max-width:860px){.work{grid-template-columns:1fr}}
-.brief{position:sticky;top:16px}
+.brief{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+.brief .full{display:block}
+.brief .tgl{display:none}
+.fab{display:none}
+#caseModal{position:fixed;inset:0;background:rgba(13,23,48,.55);z-index:40;display:flex;align-items:flex-end}
+#caseModal .sheet{background:#fff;width:100%;max-height:85vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom))}
+#caseModal .sheet h3{margin:4px 0 8px}
+#caseModal .sheet p{color:var(--muted);font-size:15px}
+@media (max-width:860px){
+  .brief{position:static;max-height:none;overflow:visible}
+  .brief .full{display:none}
+  .brief.open .full{display:block}
+  .brief .tgl{display:inline-block;margin-top:12px;background:none;border:0;padding:0;color:var(--accent);font-weight:600;cursor:pointer}
+  .fab{display:flex;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer}
+}
 .brief h3{margin:4px 0 8px;font-size:19px}
 .brief p{font-size:14px;color:var(--muted);margin:0 0 12px}
 .task{font-size:14px;border-left:3px solid var(--accent);padding-left:10px;margin-top:12px}
@@ -76,10 +90,11 @@ input[type=text]:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 
 .badge{width:64px;height:64px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:32px;font-weight:700}
 .donecard .row{justify-content:center}
 /* Presentation */
-#deck{position:fixed;inset:0;background:#0d1730;color:#fff;z-index:50;display:flex;flex-direction:column}
+#deck{position:fixed;inset:0;height:100dvh;padding-bottom:env(safe-area-inset-bottom);background:#0d1730;color:#fff;z-index:50;display:flex;flex-direction:column}
 #deck .bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;font-size:14px;color:#a9b6d6;gap:12px}
 #deck .bar button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer}
-#stage{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 24px;overflow:auto}
+#stage{flex:1;display:flex;padding:12px 24px;overflow:auto;-webkit-overflow-scrolling:touch}
+.slide{margin:auto}
 .slide{width:100%;max-width:1100px}
 .slide .tag{display:inline-block;background:#2a5cf0;color:#fff;border-radius:999px;padding:6px 16px;font-size:clamp(13px,1.5vw,17px);font-weight:600;margin-bottom:18px}
 .slide h2{font-size:clamp(28px,4.4vw,54px);line-height:1.15;margin:0 0 24px}
@@ -107,6 +122,45 @@ input[type=text]:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 
 .dots{display:flex;gap:6px;align-items:center}
 .dots i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);display:block}
 .dots i.on{background:#fff}
+/* Mobile */
+@media (max-width:640px){
+  .wrap{padding:16px 14px 96px}
+  h1{font-size:21px}
+  header.top{margin-bottom:14px}
+  .steps{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .steps::-webkit-scrollbar{display:none}
+  .steps li{white-space:nowrap;font-size:12px;padding:5px 10px}
+  .card{padding:18px 16px;border-radius:12px}
+  .login{margin:12px auto}
+  .cases{grid-template-columns:1fr;gap:12px}
+  .case{padding:16px}
+  .case h3{font-size:17px}
+  .row.between{flex-direction:column;align-items:stretch}
+  .row.between>.row{flex-direction:column;align-items:stretch}
+  .btn{width:100%;padding:14px 18px}
+  .row.between .btn.ghost{order:-1}
+  .hint{font-size:13px}
+  textarea{min-height:110px}
+  .field{padding:16px 0}
+  .chip{padding:8px 12px}
+  .donecard{margin:12px auto}
+  .donecard .row{flex-direction:column;align-items:stretch}
+  #deck .bar{padding:10px 12px;font-size:12px}
+  #deck .bar #deckWho{display:none}
+  #deck .bar #fs{display:none}
+  #stage{padding:8px 16px}
+  .slide h2{margin-bottom:16px}
+  .slide .tag{margin-bottom:12px}
+  .slide .box{padding:16px}
+  .slide .cols{gap:12px}
+  .slide .arrow{font-size:30px;justify-self:center}
+  #deck .nav{padding:10px 12px 14px}
+  #deck .nav button{flex:1;max-width:120px}
+  .dots i{width:6px;height:6px}
+  .row.between.head{flex-direction:row;align-items:center;flex-wrap:nowrap}
+  .head .btn.ghost,#caseSheet .btn.ghost{order:0}
+  .head .btn{width:auto;padding:8px 12px;font-size:14px;white-space:nowrap}
+}
 /* Print sheet */
 #sheet{display:none}
 @media print{
@@ -152,7 +206,7 @@ input[type=text]:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 
 
   <!-- STEP 2 -->
   <section id="s2" class="hidden">
-    <div class="row between" style="margin-bottom:14px">
+    <div class="row between head" style="margin-bottom:14px">
       <div class="who">Участник: <b id="who2"></b></div>
       <button class="btn ghost" data-back="1">← Изменить данные</button>
     </div>
@@ -165,7 +219,7 @@ input[type=text]:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 
     <div class="work">
       <aside class="card brief" id="brief"></aside>
       <div class="card">
-        <div class="row between" style="margin-bottom:18px">
+        <div class="row between head" style="margin-bottom:18px">
           <div class="who">Участник: <b id="who3"></b></div>
           <button class="btn ghost" data-back="2">← Другой кейс</button>
         </div>
@@ -236,6 +290,9 @@ input[type=text]:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 
   </section>
 </div>
 
+<button type="button" class="fab hidden" id="fab">📄 Кейс</button>
+<div id="caseModal" class="hidden"><div class="sheet" id="caseSheet"></div></div>
+
 <!-- PRESENTATION -->
 <div id="deck" class="hidden">
   <div class="bar">
@@ -299,6 +356,7 @@ function show(n){
   [].forEach.call(document.querySelectorAll("#steps li"), function(li){
     var s = +li.dataset.s; li.className = s===n ? "on" : (s<n ? "done" : "");
   });
+  $("fab").classList.toggle("hidden", n!==3);
   window.scrollTo(0,0);
 }
 
@@ -326,13 +384,32 @@ $("cases").innerHTML = CASES.map(function(c){
 });
 
 /* STEP 3 */
+function caseBody(c){
+  return c.text.split("\n\n").map(function(p){return "<p>"+esc(p)+"</p>";}).join("")+
+    '<div class="task"><b>Задача.</b> Определите, какое технологическое решение целесообразно внедрить в первую очередь, чтобы получить наибольший ценностный результат.</div>';
+}
+function openCaseModal(){
+  var c = cur(); if(!c) return;
+  $("caseSheet").innerHTML = '<div class="row between" style="flex-direction:row;align-items:center"><div class="kicker">Кейс '+c.id+'</div><button type="button" class="btn ghost" id="mClose" style="width:auto;padding:8px 14px">✕</button></div>'+
+    '<h3>'+esc(c.title)+'</h3><div class="goal"><b>Цель владельца</b>'+esc(c.goal)+'</div><div style="margin-top:12px">'+caseBody(c)+'</div>';
+  $("caseModal").classList.remove("hidden");
+  $("mClose").onclick = closeCaseModal;
+}
+function closeCaseModal(){ $("caseModal").classList.add("hidden"); }
+$("caseModal").addEventListener("click", function(e){ if(e.target.id==="caseModal") closeCaseModal(); });
+$("fab").onclick = openCaseModal;
 function openForm(){
   var c = cur();
   $("who3").textContent = people();
   $("brief").innerHTML = '<div class="kicker">Кейс '+c.id+'</div><h3>'+esc(c.title)+'</h3>'+
-    c.text.split("\n\n").map(function(p){return "<p>"+esc(p)+"</p>";}).join("")+
     '<div class="goal"><b>Цель владельца</b>'+esc(c.goal)+'</div>'+
-    '<div class="task"><b>Задача.</b> Определите, какое технологическое решение целесообразно внедрить в первую очередь, чтобы получить наибольший ценностный результат.</div>';
+    '<div class="full" style="margin-top:12px">'+caseBody(c)+'</div>'+
+    '<button type="button" class="tgl" id="tgl">Показать описание кейса ▾</button>';
+  $("brief").classList.remove("open");
+  $("tgl").onclick = function(){
+    var o = $("brief").classList.toggle("open");
+    $("tgl").textContent = o ? "Скрыть описание ▴" : "Показать описание кейса ▾";
+  };
   var f = $("form");
   FIELDS.forEach(function(k){ f.elements[k].value = st.ans[k] || ""; f.elements[k].classList.remove("invalid"); });
   renderLevels(); $("e3").textContent = ""; show(3);
@@ -420,7 +497,7 @@ function buildSlides(){
   ];
 }
 function renderSlide(){
-  $("stage").innerHTML = '<div class="slide">'+slides[si]+'</div>';
+  $("stage").innerHTML = '<div class="slide">'+slides[si]+'</div>'; $("stage").scrollTop = 0;
   $("deckCount").textContent = (si+1)+" / "+slides.length;
   $("dots").innerHTML = slides.map(function(_,i){return '<i class="'+(i===si?"on":"")+'"></i>';}).join("");
   $("prev").disabled = si===0; $("next").disabled = si===slides.length-1;
@@ -448,6 +525,16 @@ document.addEventListener("keydown", function(e){
   if(e.key==="Escape" && !document.fullscreenElement) closeDeck();
 });
 
+(function(){
+  var x0=null,y0=null;
+  $("stage").addEventListener("touchstart",function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  $("stage").addEventListener("touchend",function(e){
+    if(x0===null) return;
+    var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5){ (dx<0?$("next"):$("prev")).click(); }
+    x0=null;
+  },{passive:true});
+})();
 /* ===== ПЕЧАТЬ ===== */
 function buildSheet(){
   var c = cur(), a = st.ans;
